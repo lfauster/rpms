@@ -1,0 +1,15 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+[Unit]
+Description=Elastic Fabric Adapter Configuration
+DefaultDependencies=no
+Before=dev-hugepages.mount
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/amazon/bin/efa-hugepages-reserve.sh
+
+[Install]
+WantedBy=sysinit.target

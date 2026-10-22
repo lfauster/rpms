@@ -19,7 +19,7 @@
 
 Name:           libnccl-ofi
 Version:        1.21.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        NCCL and libfabric compatibility layer
 License:        Apache-2.0
 URL:            https://github.com/aws/aws-ofi-nccl
@@ -34,6 +34,7 @@ BuildRequires:  hwloc-devel
 BuildRequires:  cuda-opencl-%{cuda_pkgver}
 BuildRequires:  cuda-crt-%{cuda_pkgver}
 BuildRequires:  libfabric-devel >= 1.22.0
+BuildRequires:  gdrcopy-devel
 BuildRequires:  cuda-cudart-devel-%{cuda_pkgver}
 BuildRequires:  libtool
 BuildRequires:  make
@@ -64,6 +65,7 @@ test -f "%{_includedir}/rdma/fabric.h" || {
 %configure --disable-picky-compiler \
            --with-cuda="$cuda_path" \
            --enable-cudart-dynamic \
+           --with-gdrcopy \
            --disable-werror \
            --disable-tests \
            --enable-platform-aws
@@ -82,5 +84,8 @@ find %{buildroot} -name '*.la' -delete
 %license LICENSE NOTICE
 
 %changelog
+* Thu Oct 22 2026 Loris Fauster <lfauster@redhat.com> - 1.21.1-2
+- Enable GDRCopy support
+
 * Thu Oct 15 2026 Loris Fauster <lfauster@redhat.com> - 1.21.1-1
 - Initial package

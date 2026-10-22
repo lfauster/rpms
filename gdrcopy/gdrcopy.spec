@@ -8,8 +8,8 @@
 %global __requires_exclude ^libcuda\\.so.*$
 
 Name:           gdrcopy
-Version:        2.5.1
-Release:        4%{?dist}
+Version:        2.6
+Release:        1%{?dist}
 Summary:        GDRcopy library
 Group:          System Environment/Libraries
 License:        MIT
@@ -82,6 +82,14 @@ This package contains header and development files for GDRCopy.
 %{_libdir}/libgdrapi.so
 
 %changelog
+* Thu Oct 22 2026 Loris Fauster <lfauster@redhat.com> - 2.6-1
+- Introduce a DMA-BUF mmap backend for mapping GPU memory without the GDRCopy kernel module. GDRCopy still prefers gdrdrv when available, can fall back to DMA-BUF mmap with CUDA driver 13.3+, and can force the new backend with GDRCOPY_USE_DMABUF_MMAP.
+- Introduce GDR_ATTR_USING_DMA_BUF_MMAP so applications can query whether GDRCopy is using the DMA-BUF mmap backend.
+- Improve gdr_copy_to_mapping and gdr_copy_from_mapping performance with runtime-selected CPU copy implementations for AVX2, AVX-512, MOVDIR64B, NEON, and LS64-capable systems.
+- Add -M to gdrcopy_apiperf, gdrcopy_copybw, gdrcopy_copylat, and gdrcopy_pplat to request default, WC, cache, or device mappings.
+- Change gdrcopy_copylat and gdrcopy_pplat to report P0 and P50 latency metrics instead of average latency.
+- Fix build and install errors on Ubuntu 25.10 by using numeric install modes and dropping deprecated depmod -r usage.
+
 * Tue Oct 20 2026 Loris Fauster <lfauster@redhat.com> - 2.5.1-4
 - Package userspace tools; no kernel module
 

@@ -4,14 +4,17 @@
 %{!?cuda_prefix:%global cuda_prefix /usr/local/cuda-%{cuda_version}}
 
 # GIN benches link libcuda. The real library comes from the host driver.
-%global __requires_exclude ^libcuda\\.so.*$
+# libmpi.so.40 is the Open MPI C ABI (unchanged in 5.x). The Open MPI
+# packages do not provide the plain SONAME; they provide
+# libmpi.so.40()(64bit)(openmpi-%%{_arch}) because the library is private.
+%global __requires_exclude ^libcuda\\.so.*$|^libmpi\\.so.*$
 
 # nvcc fat binaries do not strip cleanly.
 %global debug_package %{nil}
 
 Name:           nccl-tests
 Version:        2.21.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Performance and correctness tests for NCCL
 License:        BSD-3-Clause
 URL:            https://github.com/NVIDIA/nccl-tests
@@ -26,6 +29,7 @@ BuildRequires:  cuda-crt-%{cuda_pkgver}
 BuildRequires:  cuda-driver-devel-%{cuda_pkgver}
 BuildRequires:  libnccl-devel
 BuildRequires:  openmpi-cuda-devel
+Requires:       libmpi.so.40()(64bit)(openmpi-%{_arch})
 
 ExclusiveArch:  aarch64 x86_64
 
@@ -85,5 +89,8 @@ fi
 %{_libexecdir}/nccl-tests
 
 %changelog
+* Thu Oct 22 2026 Loris Fauster <lfauster@redhat.com> - 2.21.1-2
+- Require the Open MPI 5 SONAME marker instead of plain libmpi.so.40
+
 * Thu Oct 22 2026 Loris Fauster <lfauster@redhat.com> - 2.21.1-1
 - Initial package

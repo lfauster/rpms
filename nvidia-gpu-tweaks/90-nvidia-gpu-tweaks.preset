@@ -1,0 +1,2 @@
+# nvidia-gpu-tweaks.service is a oneshot that exits 0 when no supported GPU is present.
+enable nvidia-gpu-tweaks.service
